@@ -26,6 +26,8 @@ int xdag_log(int level, const char *format, ...)
 	int done;
 	time_t t;
 
+	char stdio_msg_buf_[256];
+
 	if (level < 0 || level > XDAG_TRACE) {
 		level = XDAG_INTERNAL;
 	}
@@ -50,7 +52,12 @@ int xdag_log(int level, const char *format, ...)
 
 	va_start(arg, format);
 	done = vfprintf(f, format, arg);
+
+	vsnprintf(stdio_msg_buf_, 256, format, arg);  
+	printf("%s\n", stdio_msg_buf_);
+
 	va_end(arg);
+
 
 	fprintf(f, "\n");
 	xdag_close_file(f);
